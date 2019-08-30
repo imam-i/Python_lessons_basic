@@ -40,6 +40,39 @@ number = """
 71636269561882670428252483600823257530420752963450"""
 
 
+def my_sum(n):
+    result = 1
+    while n:
+        result *= n % 10
+        n //= 10
+    return result
+
+number = number.replace('\n', '')
+
+index = 0
+number_max = 0
+number_index = 0
+for char in number:
+    index = number.index(char, index)
+    line = number[index:index+5]
+
+    if len(line) != 5:
+        continue
+
+    _sum = my_sum(int(line))
+
+    if _sum == 59049:
+        number_max = 59049
+        number_index = index
+        break
+
+    if _sum > number_max:
+        number_max = _sum
+        number_index = index
+
+print(number_index, number_max)
+
+
 # Задание-3 (Ферзи):
 # Известно, что на доске 8×8 можно расставить 8 ферзей так, чтобы они не били
 # друг друга. Вам дана расстановка 8 ферзей на доске.

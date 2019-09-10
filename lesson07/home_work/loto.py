@@ -15,7 +15,7 @@
 --------------------------
     9 43 62          74 90
  2    27    75 78    82
-   41 56 63     76      86 
+   41 56 63     76      86
 --------------------------
 
 В игре 2 игрока: пользователь и компьютер. Каждому в начале выдается 
@@ -56,3 +56,58 @@
 модуль random: http://docs.python.org/3/library/random.html
 
 """
+
+from random import sample
+from random import randint
+
+def ticket():
+    t = sample(range(1, 91), 15)
+    l1 = t[:5];     l1.sort()
+    l2 = t[5:10];   l2.sort()
+    l3 = t[10:];    l3.sort()
+
+    def _line(l):
+        while len(l) < 9:
+            l.insert(randint(0, len(l) - 1), ' ')
+
+    _line(l1); _line(l2); _line(l3)
+    return [l1, l2, l3]
+
+kegs = sample(range(1, 91), 90)
+player_ticket = ticket()
+computer_ticket = ticket()
+
+print(player_ticket)
+print(computer_ticket)
+print(kegs)
+
+_game = True
+
+while _game:
+    print('{:-^26}'.format(' Ваша карточка '))
+    for p_line in player_ticket:
+        for p_n in p_line:
+            print('{0:>2}'.format(p_n), end=' ')
+        print()
+    print('{:-^26}\n'.format('-'))
+
+    print('{:-^26}'.format(' Карточка компьютера '))
+    for c_line in computer_ticket:
+        for c_n in c_line:
+            print('{0:>2}'.format(c_n), end=' ')
+        print()
+    print('{:-^26}\n'.format('-'))
+
+    a = input('Зачеркнуть цифру? (y/n): ')
+
+    break
+
+# print(randint(1, 90))
+#for N in range(1, 91):
+#     print(N)
+
+# for pt in player_ticket:
+# #     print(pt)
+# #
+# # for ct in computer_ticket:
+# #     print(ct)

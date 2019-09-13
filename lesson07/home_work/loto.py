@@ -69,45 +69,59 @@ def ticket():
     def _line(l):
         while len(l) < 9:
             l.insert(randint(0, len(l) - 1), ' ')
-
     _line(l1); _line(l2); _line(l3)
+
     return [l1, l2, l3]
+
+def out(ticket, mes):
+    print('{:-^26}'.format(f' {mes} '))
+    for line in ticket:
+        for n in line:
+            print('{0:>2}'.format(n), end=' ')
+        print()
+    print('{:-^26}\n'.format('-'))
+
+def cross_out(ticket, barrel):
+    _coincidence = False
+    for line in ticket:
+        if line.count(barrel):
+            _coincidence = True
+            line[line.index(barrel)] = '-'
+    return _coincidence
+
+def ticket_check(ticket):
+    c = 0
+    for line in ticket:
+        c += line.count('-')
+    if c == 15:
+        return True
+    else:
+        return False
 
 kegs = sample(range(1, 91), 90)
 player_ticket = ticket()
 computer_ticket = ticket()
 
-print(player_ticket)
-print(computer_ticket)
-print(kegs)
+for barrel in kegs:
+    out(player_ticket, ' Ваша карточка ')
+    out(computer_ticket, ' Карточка компьютера ')
 
-_game = True
+    print(f'Выпал бочёнок: {barrel}')
 
-while _game:
-    print('{:-^26}'.format(' Ваша карточка '))
-    for p_line in player_ticket:
-        for p_n in p_line:
-            print('{0:>2}'.format(p_n), end=' ')
-        print()
-    print('{:-^26}\n'.format('-'))
+    while True:
+        cross_out_n = input('Зачеркнуть цифру? (y/n): ')
+        if cross_out_n == 'y' or cross_out_n == 'n':
+            break
 
-    print('{:-^26}'.format(' Карточка компьютера '))
-    for c_line in computer_ticket:
-        for c_n in c_line:
-            print('{0:>2}'.format(c_n), end=' ')
-        print()
-    print('{:-^26}\n'.format('-'))
 
-    a = input('Зачеркнуть цифру? (y/n): ')
+    cross_out_f = cross_out(player_ticket, barrel)
+    cross_out(computer_ticket, barrel)
 
-    break
-
-# print(randint(1, 90))
-#for N in range(1, 91):
-#     print(N)
-
-# for pt in player_ticket:
-# #     print(pt)
-# #
-# # for ct in computer_ticket:
-# #     print(ct)
+    if ticket_check(player_ticket):
+        print('Игра окончена, Вы выйграли!')
+        break
+    elif (ticket_check(computer_ticket) and not ticket_check(player_ticket))\
+            or (cross_out_n == 'y' and not cross_out_f)\
+            or (cross_out_n == 'n' and cross_out_f):
+        print('Игра окончена, Вы проиграли!')
+        break
